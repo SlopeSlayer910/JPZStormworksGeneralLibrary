@@ -38,3 +38,16 @@ function polarToCartesian(angle,distance)
     local x, y = distance*math.sin(angle), -distance*math.cos(angle)
     return x, y
 end
+
+--Converts an int into a table of 1's and 0's
+---@param int number The integer to convert (will be floored)
+---@return table bits The table of 1's and 0's
+function intToBin(int)
+    local bits = {}  -- Table to store the bits
+    while math.floor(int) > 0 do
+        local rest = math.floor(int % 2)
+        bits[#bits + 1] = rest
+        int = (int - rest) / 2
+    end
+    return bits
+end
