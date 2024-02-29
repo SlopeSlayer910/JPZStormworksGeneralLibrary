@@ -51,3 +51,27 @@ function intToBin(int)
     end
     return bits
 end
+
+--Converts an int into a table of 1's and 0's
+---@param bitTable table The table of bits to convert
+---@return table boolTable The table of of tre and false
+function bitTableToBoolTable(bitTable)
+    local boolTable = {}
+    for k, v in pairs(bitTable) do
+        if v then
+            if v == 0 then
+                boolTable[k] = false
+            else
+                boolTable[k] = true
+            end
+        else
+            boolTable[k] = false
+        end
+    end
+    for i = 1, #boolTable, 1 do
+        if (boolTable[i] ~= true and boolTable[i] ~= false) then
+            boolTable[i] = false
+        end
+    end
+    return boolTable
+end
