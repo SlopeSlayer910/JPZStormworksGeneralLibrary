@@ -54,7 +54,7 @@ end
 
 --Converts an int into a table of 1's and 0's
 ---@param bitTable table The table of bits to convert
----@return table boolTable The table of of tre and false
+---@return table boolTable The table of of true and false
 function bitTableToBoolTable(bitTable)
     local boolTable = {}
     for k, v in pairs(bitTable) do
