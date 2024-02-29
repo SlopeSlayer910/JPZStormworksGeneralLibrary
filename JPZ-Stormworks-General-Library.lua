@@ -42,7 +42,7 @@ end
 --Converts an int into a table of 1's and 0's
 ---@param int number The integer to convert (will be floored)
 ---@return table bits The table of 1's and 0's
-function intToBin(int)
+function intToBits(int)
     local bits = {}  -- Table to store the bits
     while math.floor(int) > 0 do
         local rest = math.floor(int % 2)
