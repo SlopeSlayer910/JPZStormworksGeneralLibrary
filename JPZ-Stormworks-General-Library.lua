@@ -1,3 +1,4 @@
+---@section clamp
 --Converts turns to degrees
 ---@param min number The lower bound
 ---@param max number The upper bound
@@ -7,16 +8,18 @@ function clamp(min, max, value)
     local clampedValue = math.max(min, math.min(max, value))
     return clampedValue
   end
---#endregion
+---@endsection
 
+---@section turnsToDegrees
 --Converts turns to degrees
 ---@param turns number The turns for conversion (North 0, Clockwise, turns)
 ---@return number bearing The degrees output
 function turnsToDegrees(turns)
     return turns*360
 end
+---@endsection
 
-
+---@section turnsToBearing
 --Converts turns to degrees and normalises it between 0 - 360
 ---@param turns number The turns for conversion (North 0, Clockwise, turns)
 ---@return number bearing The degrees output (0->360)
@@ -24,8 +27,9 @@ function turnsToBearing(turns)
     local bearing = ((1+turns)%1)*360
     return bearing
 end
+---@endsection
 
-
+---@section cartesianToPolar
 --Converts cartesian coordinates to polar coordinates
 ---@param x number The x for conversion 
 ---@param y number The y for conversion
@@ -34,7 +38,9 @@ function cartesianToPolar(x,y)
     local angle, distance = math.atan(x,-y), math.sqrt(x^2+y^2)
     return angle, distance
 end
+---@endsection
 
+---@section polarToCartesian
 --Converts polar coordinates to cartesian coordinates
 ---@param angle number The angle for conversion (North 0, Clockwise, radians)
 ---@param distance number The distance for conversion
@@ -43,8 +49,9 @@ function polarToCartesian(angle,distance)
     local x, y = distance*math.sin(angle), -distance*math.cos(angle)
     return x, y
 end
+---@endsection
 
-
+---@section bitTableToBoolTable
 --Converts an table of 1,s and 0's into a table of true and false
 ---@param bitTable table The table of bits to convert
 ---@return table boolTable The table of of true and false
@@ -68,7 +75,9 @@ function bitTableToBoolTable(bitTable)
     end
     return boolTable
 end
+---@endsection
 
+---@section intToBits
 --Converts an int into a table of 1's and 0's
 ---@param int number The integer to convert (will be floored)
 ---@return table bits The table of 1's and 0's
@@ -81,7 +90,9 @@ function intToBits(int)
     end
     return bits
 end
+---@endsection
 
+---@section readBits
 --Extracts an integer with the binary equivilent of the designated part of the data input
 ---@param data number The integer to extract the bits from
 ---@param startBit number The position of the MSB that you want to extract
@@ -95,7 +106,9 @@ function readBits(data, startBit, numberOfBits)
     end
     return bitValue
 end
+---@endsection
 
+---@section writeBits
 --Extracts an integer with the binary equivilent of the designated part of the data input
 ---@param data number The integer to write the bits too
 ---@param bitStart number The position of the MSB that you want to write
@@ -103,6 +116,7 @@ end
 ---@return number bitValue The integer with the bits written to it
 function writeBits(data, bitStart, bits)
     local mask = 2^32-1
-    local newMask = mask&(bits<<bitStart)
+    local newMask = mask & (bits << (bitStart - math.floor(math.log(bits,2)+1)))
     return (data&newMask)
 end
+---@endsection
