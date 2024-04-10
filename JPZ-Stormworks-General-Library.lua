@@ -1,6 +1,11 @@
---#region clamp
+--Converts turns to degrees
+---@param min number The lower bound
+---@param max number The upper bound
+---@param value number The number to clamp bound
+---@return number clampedValue The clamped output
 function clamp(min, max, value)
-    return math.max(min, math.min(max, value))
+    local clampedValue = math.max(min, math.min(max, value))
+    return clampedValue
   end
 --#endregion
 
@@ -39,20 +44,8 @@ function polarToCartesian(angle,distance)
     return x, y
 end
 
---Converts an int into a table of 1's and 0's
----@param int number The integer to convert (will be floored)
----@return table bits The table of 1's and 0's
-function intToBits(int)
-    local bits = {}  -- Table to store the bits
-    while math.floor(int) > 0 do
-        local rest = math.floor(int % 2)
-        bits[#bits + 1] = rest
-        int = (int - rest) / 2
-    end
-    return bits
-end
 
---Converts an int into a table of 1's and 0's
+--Converts an table of 1,s and 0's into a table of true and false
 ---@param bitTable table The table of bits to convert
 ---@return table boolTable The table of of true and false
 function bitTableToBoolTable(bitTable)
@@ -74,4 +67,42 @@ function bitTableToBoolTable(bitTable)
         end
     end
     return boolTable
+end
+
+--Converts an int into a table of 1's and 0's
+---@param int number The integer to convert (will be floored)
+---@return table bits The table of 1's and 0's
+function intToBits(int)
+    local bits = {}  -- Table to store the bits
+    while math.floor(int) > 0 do
+        local rest = math.floor(int % 2)
+        bits[#bits + 1] = rest
+        int = (int - rest) / 2
+    end
+    return bits
+end
+
+--Extracts an integer with the binary equivilent of the designated part of the data input
+---@param data number The integer to extract the bits from
+---@param startBit number The position of the MSB that you want to extract
+---@param numberOfBits number The number of bits to extract
+---@return number bitValue The integer with the binary equivilent of the designated part of the data input
+function readBits(data, startBit, numberOfBits)
+    local bitValue = 0
+    for i = 1, numberOfBits, 1 do
+        bitValue = bitValue << 1
+        bitValue = bitValue|((data >> startBit-i)&1)
+    end
+    return bitValue
+end
+
+--Extracts an integer with the binary equivilent of the designated part of the data input
+---@param data number The integer to write the bits too
+---@param bitStart number The position of the MSB that you want to write
+---@param bits number The integer reprisenting the bits to write
+---@return number bitValue The integer with the bits written to it
+function writeBits(data, bitStart, bits)
+    local mask = 2^32-1
+    local newMask = mask&(bits<<bitStart)
+    return (data&newMask)
 end
