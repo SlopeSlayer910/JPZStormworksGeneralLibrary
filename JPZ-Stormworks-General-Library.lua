@@ -7,7 +7,7 @@
 function clamp(min, max, value)
     local clampedValue = math.max(min, math.min(max, value))
     return clampedValue
-  end
+end
 ---@endsection
 
 ---@section turnsToDegrees
@@ -108,15 +108,25 @@ function readBits(data, startBit, numberOfBits)
 end
 ---@endsection
 
----@section writeBits
+---@section writeBits 
+--FIXME
 --Extracts an integer with the binary equivilent of the designated part of the data input
 ---@param data number The integer to write the bits too
----@param bitStart number The position of the MSB that you want to write
+---@param bitMSB number The position of the MSB that you want to write
+---@param bitLSB number The position of the LSB that you want to write
 ---@param bits number The integer reprisenting the bits to write
 ---@return number bitValue The integer with the bits written to it
-function writeBits(data, bitStart, bits)
-    local mask = 2^32-1
-    local newMask = mask & (bits << (bitStart - math.floor(math.log(bits,2)+1)))
-    return (data&newMask)
+function writeBits(data, bitMSB, bitLSB, bits)
+    data = data or 0
+    bitMSB = bitMSB or 1
+    bitLSB = (bitLSB or 1) - 1
+    bits = bits or 0
+    local filledMask = 2^32-1
+    local mask = filledMask << (bitMSB)
+    mask = mask | (2^bitLSB-1)
+    mask = mask & filledMask
+    local foo = data & mask
+    local output = foo | (bits << (bitLSB-1))
+    return output
 end
 ---@endsection
