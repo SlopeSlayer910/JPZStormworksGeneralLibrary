@@ -117,16 +117,13 @@ end
 ---@param bits number The integer reprisenting the bits to write
 ---@return number bitValue The integer with the bits written to it
 function writeBits(data, bitMSB, bitLSB, bits)
-    data = data or 0
-    bitMSB = bitMSB or 1
-    bitLSB = (bitLSB or 1) - 1
-    bits = bits or 0
-    local filledMask = 2^32-1
-    local mask = filledMask << (bitMSB)
-    mask = mask | (2^bitLSB-1)
-    mask = mask & filledMask
-    local foo = data & mask
-    local output = foo | (bits << (bitLSB-1))
-    return output
+    local data = data or 0                                --Makes sure data is not nil
+    local mask = 0
+    for i = 0, bitMSB-bitLSB, 1 do
+        mask = mask | (1 << (i))
+    end
+    mask = mask << bitLSB-1
+    mask = ~mask
+    return data & mask | ((bits  or 0) << (bitLSB - 1))
 end
 ---@endsection
